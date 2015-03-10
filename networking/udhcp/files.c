@@ -10,7 +10,7 @@
 
 #include "common.h"
 #include "dhcpd.h"
-
+#include "ether_aton.h"
 /* on these functions, make sure your datatype matches */
 static int FAST_FUNC read_str(const char *line, void *arg)
 {

@@ -4,7 +4,7 @@ BB_PATH := $(LOCAL_PATH)
 # Bionic Branches Switches (GB/ICS/L)
 BIONIC_ICS := false
 BIONIC_L := true
-
+BB_DEPS: libm
 # Make a static library for regex.
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := android/regex/bb_regex.c
@@ -52,7 +52,7 @@ endif
 bb_gen := $(abspath $(TARGET_OUT_INTERMEDIATES)/busybox)
 
 busybox_prepare_full := $(bb_gen)/full/.config
-$(busybox_prepare_full): $(BB_PATH)/busybox-full.config
+$(busybox_prepare_full): $(BB_PATH)/busybox-full.config $(BB_DEPS)
 	@echo -e ${CL_YLW}"Prepare config for busybox binary"${CL_RST}
 	@rm -rf $(bb_gen)/full
 	@rm -f $(shell find $(abspath $(call intermediates-dir-for,EXECUTABLES,busybox)) -name "*.o")
@@ -83,11 +83,12 @@ BUSYBOX_SRC_FILES = \
 	$(shell cat $(BB_PATH)/busybox-$(BUSYBOX_CONFIG).sources) \
 	android/libc/mktemp.c \
 	android/libc/pty.c \
-	android/android.c
+	android/android.c \
+	android/libc/ether_aton.c
 
 BUSYBOX_ASM_FILES =
 ifneq ($(BIONIC_L),true)
-    BUSYBOX_ASM_FILES += swapon.S swapoff.S sysinfo.S
+    BUSYBOX_ASM_FILES += swapon.S swapoff.S sysinfo.S __rt_sigtimedwait.S
 endif
 
 ifneq ($(filter arm x86 mips,$(TARGET_ARCH)),)

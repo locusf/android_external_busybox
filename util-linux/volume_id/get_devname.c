@@ -277,7 +277,6 @@ char *get_fstype_from_devname(const char *device)
 
 	if (!S_ISBLK(statbuf.st_mode) && !S_ISREG(statbuf.st_mode))
 		return NULL;
-
 	add_to_uuid_cache(device);
 	uc = uuidcache_init(0);
 

@@ -248,7 +248,7 @@
 # define dbg3(...) ((void)0)
 #endif
 
-
+int __rt_sigtimedwait(const sigset_t*, siginfo_t*, const struct timespec*, size_t);
 static const char keywords[] ALIGN1 = "add\0remove\0"; // "change\0"
 enum { OP_add, OP_remove };
 
@@ -987,7 +987,7 @@ wait_for_seqfile(const char *seq)
 			dbg2("%s waiting for '%s'", curtime(), seqbuf);
 			do_once = 0;
 		}
-		if (sigtimedwait(&set_CHLD, NULL, &ts) >= 0) {
+		if (__rt_sigtimedwait(&set_CHLD, NULL, &ts, sizeof(sigset_t)) >= 0) {
 			dbg3("woken up");
 			continue; /* don't decrement timeout! */
 		}
